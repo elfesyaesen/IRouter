@@ -2,7 +2,7 @@
 
 **IRouter**, uygulamanızın rotalarını kolaylıkla yönetmek için basit ama güçlü bir yönlendirme sistemidir.
 
-- [Youtube Kanalım]([https://www.youtube.com/@software-developers]).
+- [Youtube Kanalım](https://www.youtube.com/@software-developers).
 
 ## Kurulum
 
