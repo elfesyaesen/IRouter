@@ -9,5 +9,8 @@
     <h1>Anasayfa</h1>
     <p>Url isteği : <?php print $_SERVER["REQUEST_URI"]; ?></p>
     <p>ID parametresi : <?php print $id; ?></p>
+    <p>
+        <?php print_r($product); ?>
+    </p>
 </body>
 </html>
