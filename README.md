@@ -1,37 +1,41 @@
-# PHP Routing System
+# PHP Rota Sistemi
 
-**IRouter** is a simple yet powerful routing system for managing your application's routes with ease.
+**IRouter**, uygulamanızın rotalarını kolaylıkla yönetmek için basit ama güçlü bir yönlendirme sistemidir.
 
-## Installation
+## Kurulum
 
-First, clone the repository and include the router in your project:
+İlk olarak, depoyu klonlayın ve projeye yönlendiriciyi dahil edin:
 
 ```php
 require_once __DIR__ . '/system/Router/Router.php';
 
-$router = new \System\IRouter\Router();
+## Kullanım
 
 ```php
-// Adding a route for the home page
-$router->add('catalog-index', // Name of the route for easy identification
-    array('/', // URL pattern
-    ['controller' => 'Controller\HomeController', 'method' => 'index'], // Controller and method to execute
-    [], // Parameters if any
-    ['GET']) // Allowed HTTP methods
+$router = new \System\IRouter\Router();
+
+// Ana sayfa için bir rota eklemek
+$router->add('catalog-index', // Kolay tanımlama için rotaya isim verelim
+    array('/', // URL deseni
+    ['controller' => 'Controller\HomeController', 'method' => 'index'], // Çalıştırılacak controller ve metod
+    [], // Varsa parametreler
+    ['GET']) // Kabul edilen HTTP metodları
 );
 
-// Adding a route for a product page with an ID parameter
+// ID parametresi içeren bir ürün sayfası rotası eklemek
 $router->add('catalog-product',
-    array('/product/{id}', // URL pattern with a parameter
-    ['controller' => 'Controller\ProductController', 'method' => 'show'], // Controller and method to execute
-    ['id' => '[0-9]+'], // Parameter pattern
-    ['GET', 'POST']) // Allowed HTTP methods
+    array('/product/{id}', // Parametre içeren URL deseni
+    ['controller' => 'Controller\ProductController', 'method' => 'show'], // Çalıştırılacak controller ve metod
+    ['id' => '[0-9]+'], // Parametre deseni
+    ['GET', 'POST']) // Kabul edilen HTTP metodları
 );
 
-// Dispatch the request
+// İsteği yönlendir
 $router->dispatch();
 
-Features
-Easy Route Management: Easily define and manage routes with names for quick identification.
-Parameter Handling: Support for URL parameters with validation.
-HTTP Methods: Specify which HTTP methods (GET, POST, etc.) are accepted for each route.
+## Özellikler
+**Kolay Rota Yönetimi**: Rotaları kolayca tanımlayın ve hızlı tanımlama için isimlendirin.
+**Parametre İşleme**: Parametre doğrulama ile URL parametrelerini destekler.
+**HTTP Metodları**: Her rota için kabul edilen HTTP metodlarını (GET, POST vb.) belirleyin.
+Katkıda Bulunun
+Katkılarınızı bekliyoruz! Lütfen depoyu fork'layın ve herhangi bir iyileştirme veya hata düzeltmesi için pull request gönderin.
