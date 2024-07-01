@@ -34,8 +34,8 @@ $router->add('catalog-product',
 $router->dispatch();
 ```
 ## Özellikler
-**Kolay Rota Yönetimi**: Rotaları kolayca tanımlayın ve hızlı tanımlama için isimlendirin.
-**Parametre İşleme**: Parametre doğrulama ile URL parametrelerini destekler.
-**HTTP Metodları**: Her rota için kabul edilen HTTP metodlarını (GET, POST vb.) belirleyin.
-Katkıda Bulunun
+- **Kolay Rota Yönetimi**: Rotaları kolayca tanımlayın ve hızlı tanımlama için isimlendirin.
+- **Parametre İşleme**: Parametre doğrulama ile URL parametrelerini destekler.
+- **HTTP Metodları**: Her rota için kabul edilen HTTP metodlarını (GET, POST vb.) belirleyin.
+- Katkıda Bulunun
 Katkılarınızı bekliyoruz! Lütfen depoyu fork'layın ve herhangi bir iyileştirme veya hata düzeltmesi için pull request gönderin.
