@@ -35,6 +35,11 @@ $router->add('catalog-product',
 // İsteği yönlendir
 $router->dispatch();
 ```
+
+## Projeyi Basşatma
+```php
+    php -S 127.0.0.1:8000
+```
 ## Özellikler
 - **Kolay Rota Yönetimi**: Rotaları kolayca tanımlayın ve hızlı tanımlama için isimlendirin.
 - **Parametre İşleme**: Parametre doğrulama ile URL parametrelerini destekler.
