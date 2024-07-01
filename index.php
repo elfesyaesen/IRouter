@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/system/Router/Router.php';
+// index.php
+require_once __DIR__ . '/system/IRouter/Router.php';
 
 $router = new \System\IRouter\Router();
 $router->add('catalog-index',array('/',['controller' => 'Controller\HomeController', 'method' => 'index'],[],['GET']));
