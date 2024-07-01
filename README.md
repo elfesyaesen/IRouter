@@ -2,6 +2,8 @@
 
 **IRouter**, uygulamanızın rotalarını kolaylıkla yönetmek için basit ama güçlü bir yönlendirme sistemidir.
 
+- [Youtube Kanalım]([https://www.youtube.com/@software-developers]).
+
 ## Kurulum
 
 İlk olarak, depoyu klonlayın ve projeye yönlendiriciyi dahil edin:
