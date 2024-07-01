@@ -8,7 +8,7 @@
 
 ```php
 require_once __DIR__ . '/system/Router/Router.php';
-
+```
 ## Kullanım
 
 ```php
@@ -32,7 +32,7 @@ $router->add('catalog-product',
 
 // İsteği yönlendir
 $router->dispatch();
-
+```
 ## Özellikler
 **Kolay Rota Yönetimi**: Rotaları kolayca tanımlayın ve hızlı tanımlama için isimlendirin.
 **Parametre İşleme**: Parametre doğrulama ile URL parametrelerini destekler.
