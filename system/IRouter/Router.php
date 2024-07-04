@@ -34,8 +34,8 @@ class Router
             }
         }
 
-        self::$currentPrefix = '';  // Reset prefix after group
-        self::$currentMiddleware = [];  // Reset middleware after group
+        self::$currentPrefix = '';
+        self::$currentMiddleware = [];
     }
 
     public static function get(string $name, array $route): Route
@@ -80,12 +80,12 @@ class Router
                 }
             } elseif ($route->matchUri($uri)) {
                 http_response_code(405);
-                echo "405 Method Not Allowed: The method $method is not allowed for the route $uri.";
+                echo "405 Metod bulunamadı: $method Bu method rotaya tanımlı değil. rota :  $uri.";
                 return;
             }
         }
 
         http_response_code(404);
-        echo "404 Not Found: The route $uri was not found.";
+        echo "404 $uri Bu rota bulunamadı...";
     }
 }
