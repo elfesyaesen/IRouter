@@ -22,13 +22,15 @@ class Router
     public static function middleware(array $middleware): self
     {
         self::$currentMiddleware = array_merge(self::$currentMiddleware, $middleware);
+
+        
         return new static;
     }
 
     public static function group(array $routes): void
     {
         foreach ($routes as $route) {
-            if ($route instanceof Route) {
+            if ($route instanceof \System\IRouter\Route) {
                 $route->setPrefix(self::$currentPrefix);
                 $route->addMiddleware(self::$currentMiddleware);
             }
@@ -79,8 +81,7 @@ class Router
                     return;
                 }
             } elseif ($route->matchUri($uri)) {
-                http_response_code(405);
-                echo "405 Metod bulunamadı: $method Bu method rotaya tanımlı değil. rota :  $uri.";
+                throw new \Exception("405 Metod bulunamadı: $method Bu method rotaya tanımlı değil. rota :  $uri.", 405);
                 return;
             }
         }

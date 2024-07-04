@@ -32,7 +32,7 @@ class Route
 
     public function setPrefix(string $prefix): void
     {
-        $this->path = rtrim($prefix, '/') . '/' . ltrim($this->path, '/');
+       $this->path = '/' . ltrim($this->path, '/');
     }
 
     public function addMiddleware(array $middleware): void
@@ -54,6 +54,7 @@ class Route
 
     public function match(string $method, string $uri): bool
     {
+
         if (!in_array($method, $this->methods)) {
             return false;
         }
