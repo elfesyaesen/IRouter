@@ -13,10 +13,6 @@ require_once __DIR__ . '/system/IRouter/Autoloader.php';
 //rota sistemi
 use System\IRouter\Router;
 
-Router::prefix('/api')->group([
-    Router::get('api-products', ['/products', ['Catalog\Controller\ProductController', 'index']])->middleware(["role:admin"]),
-]);
-
 Router::get('home', ['/', ['Catalog\Controller\HomeController', 'index']])->middleware(["role:admin"]);
 Router::get('catalog-products', ['/products', ['Catalog\Controller\ProductController', 'index']]);
 Router::get('catalog-product', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
