@@ -22,11 +22,23 @@ require_once __DIR__ . '/system/IRouter/Autoloader.php';
 //rota sistemi
 use System\IRouter\Router;
 
-Router::get('anasayfa', ['/', ['Catalog\Controller\HomeController', 'index']])->middleware(["role:admin"]);
-Router::get('urunler', ['/products', ['Catalog\Controller\ProductController', 'index']]);
-Router::get('urun', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
+Router::get('catalog', ['/', ['Catalog\Controller\HomeController', 'index']]);
+
+Router::get('catalog-product', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
     ->params(['id' => '[0-9]+'])
     ->middleware(['permission:product-edit']);
+    
+Router::prefix('/api')->group(function() {
+    Router::get('users', ['/users', ['Catalog\Controller\UserController', 'index']]);
+
+    Router::get('user', ['/user/{id}', ['Catalog\Controller\UserController', 'show']])
+        ->params(['id' => '[0-9]+']);
+    
+    Router::prefix('/admin')->group(function() {
+        Router::get('dashboard', ['/dashboard', ['Catalog\Controller\DashboardController', 'index']])
+            ->middleware(['role:admin']);
+    });
+});
 
 Router::dispatch();
 ```
