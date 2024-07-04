@@ -22,6 +22,11 @@ require_once __DIR__ . '/system/IRouter/Autoloader.php';
 //rota sistemi
 use System\IRouter\Router;
 
+// prefix ve rota gruplama
+Router::prefix('/api')->group([
+    Router::get('api-products', ['/products', ['Catalog\Controller\ProductController', 'index']])->middleware(["role:admin"]),
+]);
+
 Router::get('anasayfa', ['/', ['Catalog\Controller\HomeController', 'index']])->middleware(["role:admin"]);
 Router::get('urunler', ['/products', ['Catalog\Controller\ProductController', 'index']]);
 Router::get('urun', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
