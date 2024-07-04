@@ -9,35 +9,17 @@ namespace System\IRouter;
 
 class Route
 {
-    private array $methods;
-    private string $name;
+    private string $method;
     private string $path;
     private array $handler;
-    private array $middleware;
     private array $params = [];
+    private array $middleware = [];
 
-    public function __construct(string $methods, string $name, string $path, array $handler, array $middleware = [])
+    public function __construct(string $method, string $path, array $handler)
     {
-        $this->methods = explode('|', $methods);
-        $this->name = $name;
+        $this->method = $method;
         $this->path = $path;
         $this->handler = $handler;
-        $this->middleware = $middleware;
-    }
-
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    public function setPrefix(string $prefix): void
-    {
-       $this->path = '/' . ltrim($this->path, '/');
-    }
-
-    public function addMiddleware(array $middleware): void
-    {
-        $this->middleware = array_merge($this->middleware, $middleware);
     }
 
     public function params(array $params): self
@@ -52,54 +34,41 @@ class Route
         return $this;
     }
 
+    public function setMiddleware(array $middleware): void
+    {
+        $this->middleware = array_merge($this->middleware, $middleware);
+    }
+
     public function match(string $method, string $uri): bool
     {
-
-        if (!in_array($method, $this->methods)) {
+        if ($this->method !== 'ANY' && $this->method !== $method) {
             return false;
         }
 
         $pattern = $this->getPattern();
-        $result = preg_match($pattern, $uri, $matches);
-        if ($result) {
-            array_shift($matches);
-            $this->params = array_combine(array_keys($this->params), $matches);
-        }
-        return $result;
-    }
-
-    public function matchUri(string $uri): bool
-    {
-        $pattern = $this->getPattern();
-        return preg_match($pattern, $uri);
+        return preg_match($pattern, $uri, $matches) === 1;
     }
 
     private function getPattern(): string
     {
-        $path = preg_replace('/\/+/', '/', $this->path);
-        foreach ($this->params as $key => $value) {
-            $path = str_replace("{" . $key . "}", "($value)", $path);
+        $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '(?P<$1>[^/]+)', $this->path);
+        foreach ($this->params as $param => $regex) {
+            $pattern = str_replace("(?P<$param>[^/]+)", "(?P<$param>$regex)", $pattern);
         }
-        return "#^" . $path . "$#";
+        return '#^' . $pattern . '$#';
     }
 
-    public function runMiddleware(): void
+    public function executeMiddleware(): void
     {
         foreach ($this->middleware as $middleware) {
             \System\Middleware\MiddlewareAlias::run($middleware);
         }
     }
 
-    public function call(): void
+    public function execute(): void
     {
-        [$controller, $method] = $this->handler;
-        if (!class_exists($controller)) {
-            throw new \Exception("Controller not found: $controller", 500);
-        }
-        $instance = new $controller();
-        if (!method_exists($instance, $method)) {
-            throw new \Exception("Method not found: $method in $controller", 500);
-        }
-        call_user_func_array([$instance, $method], array_values($this->params));
+        $controller = new $this->handler[0]();
+        $method = $this->handler[1];
+        $controller->$method();
     }
 }

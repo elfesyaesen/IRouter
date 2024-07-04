@@ -2,15 +2,16 @@
 
 namespace Catalog\Controller;
 
-class ProductController
+class DashboardController
 {
     public function index()
     {
-        echo "ProductController index!";
+        echo "DashboardController index!";
     }
 
     public function show()
     {
-        echo "ProductController show!";
+        echo "DashboardController index!";
     }
 }
+?>

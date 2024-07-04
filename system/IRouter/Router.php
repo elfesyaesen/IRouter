@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
     Paket adı : IRouter 
     Geliştirici : Elfesya ESEN
@@ -7,37 +7,17 @@
 
 namespace System\IRouter;
 
+use System\Middleware\MiddlewareAlias;
+
 class Router
 {
     private static array $routes = [];
-    private static string $currentPrefix = '';
-    private static array $currentMiddleware = [];
+    private static string $prefix = '';
+    private static array $groupMiddleware = [];
 
-    public static function prefix(string $prefix): self
+    public static function any(string $name, array $route): Route
     {
-        self::$currentPrefix = '/' . trim($prefix, '/');
-        return new static;
-    }
-
-    public static function middleware(array $middleware): self
-    {
-        self::$currentMiddleware = array_merge(self::$currentMiddleware, $middleware);
-
-        
-        return new static;
-    }
-
-    public static function group(array $routes): void
-    {
-        foreach ($routes as $route) {
-            if ($route instanceof \System\IRouter\Route) {
-                $route->setPrefix(self::$currentPrefix);
-                $route->addMiddleware(self::$currentMiddleware);
-            }
-        }
-
-        self::$currentPrefix = '';
-        self::$currentMiddleware = [];
+        return self::addRoute('ANY', $name, $route);
     }
 
     public static function get(string $name, array $route): Route
@@ -50,43 +30,59 @@ class Router
         return self::addRoute('POST', $name, $route);
     }
 
-    public static function any(string $name, array $route): Route
+    private static function addRoute(string $method, string $name, array $route): Route
     {
-        return self::addRoute('GET|POST', $name, $route);
+        $path = self::$prefix . $route[0];
+        $routeObj = new \System\IRouter\Route($method, $path, $route[1]);
+        $routeObj->setMiddleware(self::$groupMiddleware);
+        self::$routes[$name] = $routeObj;
+        return $routeObj;
     }
 
-    private static function addRoute(string $methods, string $name, array $route): Route
+    public static function prefix(string $prefix): self
     {
-        [$path, $handler] = $route;
-        $path = rtrim(self::$currentPrefix, '/') . '/' . ltrim($path, '/');
-        $route = new Route($methods, $name, $path, $handler, self::$currentMiddleware);
-        self::$routes[$name] = $route;
-        return $route;
+        $newRouter = new self();
+        self::$prefix .= $prefix;
+        return $newRouter;
+    }
+
+    public static function group(callable $callback): void
+    {
+        $oldPrefix = self::$prefix;
+        $oldGroupMiddleware = self::$groupMiddleware;
+
+        $callback();
+
+        self::$prefix = $oldPrefix;
+        self::$groupMiddleware = $oldGroupMiddleware;
+    }
+
+    public static function middleware(array $middleware): self
+    {
+        $newRouter = new self();
+        self::$groupMiddleware = array_merge(self::$groupMiddleware, $middleware);
+        return $newRouter;
     }
 
     public static function dispatch(): void
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        foreach (self::$routes as $name => $route) {
-            if ($route->match($method, $uri)) {
+        foreach (self::$routes as $route) {
+            if ($route->match($requestMethod, $requestUri)) {
                 try {
-                    $route->runMiddleware();
-                    $route->call();
-                    return;
+                    $route->executeMiddleware();
+                    $route->execute();
                 } catch (\Exception $e) {
                     http_response_code($e->getCode() ?: 500);
                     echo $e->getMessage();
-                    return;
                 }
-            } elseif ($route->matchUri($uri)) {
-                throw new \Exception("405 Metod bulunamadı: $method Bu method rotaya tanımlı değil. rota :  $uri.", 405);
                 return;
             }
         }
 
         http_response_code(404);
-        echo "404 $uri Bu rota bulunamadı...";
+        echo "404 Not Found";
     }
 }
