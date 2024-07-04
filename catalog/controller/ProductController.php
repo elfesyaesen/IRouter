@@ -9,8 +9,8 @@ class ProductController
         echo "ProductController index!";
     }
 
-    public function show()
+    public function show($id)
     {
-        echo "ProductController show!";
+        var_dump($id);
     }
 }

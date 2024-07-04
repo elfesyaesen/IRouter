@@ -13,9 +13,9 @@ require_once __DIR__ . '/system/IRouter/Router.php';
 // index.php
 use System\IRouter\Router;
 
-Router::any('home', ['/', ['Catalog\Controller\HomeController', 'index']])->middleware(['role:admin']);
-Router::get('catalog-products', ['/products', ['Catalog\Controller\ProductController', 'index']]);
-Router::get('catalog-product', ['/product/{id}', ['Catalog\Controller\ProductController', 'index']])
+Router::get('catalog', ['/', ['Catalog\Controller\HomeController', 'index']]);
+
+Router::get('catalog-product', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
     ->params(['id' => '[0-9]+'])
     ->middleware(['permission:product-edit']);
     

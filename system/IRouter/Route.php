@@ -46,7 +46,7 @@ class Route
         }
 
         $pattern = $this->getPattern();
-        return preg_match($pattern, $uri, $matches) === 1;
+        return preg_match($pattern, $uri, $this->params) === 1;
     }
 
     private function getPattern(): string
@@ -69,6 +69,11 @@ class Route
     {
         $controller = new $this->handler[0]();
         $method = $this->handler[1];
-        $controller->$method();
+        
+        // URL'den parametreleri çıkar
+        $args = array_filter($this->params, 'is_string', ARRAY_FILTER_USE_KEY);
+        
+        // Parametreleri controller metoduna geçir
+        call_user_func_array([$controller, $method], $args);
     }
 }

@@ -68,20 +68,21 @@ class Router
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
+    
         foreach (self::$routes as $route) {
             if ($route->match($requestMethod, $requestUri)) {
                 try {
                     $route->executeMiddleware();
                     $route->execute();
+                    return; // İşlem tamamlandıktan sonra fonksiyondan çık
                 } catch (\Exception $e) {
                     http_response_code($e->getCode() ?: 500);
                     echo $e->getMessage();
+                    return; // Hata durumunda da fonksiyondan çık
                 }
-                return;
             }
         }
-
+    
         http_response_code(404);
         echo "404 Not Found";
     }
