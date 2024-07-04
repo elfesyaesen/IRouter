@@ -1,4 +1,11 @@
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+    # Paket adı : IRouter 
+    # Geliştirici : Elfesya ESEN
+    # Youtube Kanalı : https://www.youtube.com/@software-developers
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|webp|js|css|svg)
+    RewriteRule ^([^?]*) index.php?route=$1 [L,QSA]
+</IfModule>

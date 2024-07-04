@@ -1,73 +1,91 @@
 <?php 
-// system\IRouter\Router.php
+/*
+    Paket adı : IRouter 
+    Geliştirici : Elfesya ESEN
+    Youtube Kanalı : https://www.youtube.com/@software-developers
+*/
 
 namespace System\IRouter;
-class Router {
-    private $routes = [];
-    private $method;
-    private $path;
 
-    public function __construct() {
-        spl_autoload_register(function ($class) {
-            $base_dir = __DIR__ .'/../../';
-             $file =  $base_dir . str_replace('\\', '/', $class ). '.php';
-             if (file_exists($file)) { require_once $file; }
-         });
-         
-        $this->method = $_SERVER['REQUEST_METHOD'];
-        $this->path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+class Router
+{
+    private static array $routes = [];
+    private static string $currentPrefix = '';
+    private static array $currentMiddleware = [];
+
+    public static function prefix(string $prefix): self
+    {
+        self::$currentPrefix = '/' . trim($prefix, '/');
+        return new static;
     }
 
-    public function add($name, $route) {
-        $this->routes[$name] = $route;
+    public static function middleware(array $middleware): self
+    {
+        self::$currentMiddleware = array_merge(self::$currentMiddleware, $middleware);
+        return new static;
     }
 
-    public function dispatch() {
-        foreach ($this->routes as $route) {
-            $routePath = $route[0];
-            $routeMethods = $route[3];
-            $pattern = $this->convertToPattern($routePath, $route[2]);
-            if (preg_match($pattern, $this->path, $matches)) {
-                if (in_array($this->method, $routeMethods)) {
-                    array_shift($matches);
-                    $data = $this->callHandler($route[1], $matches);
-                    return;
-                } else {
-                    http_response_code(405);
-                    echo "405 Method Bulunamadı...";
-                    return;
-                }
+    public static function group(array $routes): void
+    {
+        foreach ($routes as $route) {
+            if ($route instanceof Route) {
+                $route->setPrefix(self::$currentPrefix);
+                $route->addMiddleware(self::$currentMiddleware);
             }
         }
+
+        self::$currentPrefix = '';  // Reset prefix after group
+        self::$currentMiddleware = [];  // Reset middleware after group
+    }
+
+    public static function get(string $name, array $route): Route
+    {
+        return self::addRoute('GET', $name, $route);
+    }
+
+    public static function post(string $name, array $route): Route
+    {
+        return self::addRoute('POST', $name, $route);
+    }
+
+    public static function any(string $name, array $route): Route
+    {
+        return self::addRoute('GET|POST', $name, $route);
+    }
+
+    private static function addRoute(string $methods, string $name, array $route): Route
+    {
+        [$path, $handler] = $route;
+        $path = rtrim(self::$currentPrefix, '/') . '/' . ltrim($path, '/');
+        $route = new Route($methods, $name, $path, $handler, self::$currentMiddleware);
+        self::$routes[$name] = $route;
+        return $route;
+    }
+
+    public static function dispatch(): void
+    {
+        $method = $_SERVER['REQUEST_METHOD'];
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        foreach (self::$routes as $name => $route) {
+            if ($route->match($method, $uri)) {
+                try {
+                    $route->runMiddleware();
+                    $route->call();
+                    return;
+                } catch (\Exception $e) {
+                    http_response_code($e->getCode() ?: 500);
+                    echo $e->getMessage();
+                    return;
+                }
+            } elseif ($route->matchUri($uri)) {
+                http_response_code(405);
+                echo "405 Method Not Allowed: The method $method is not allowed for the route $uri.";
+                return;
+            }
+        }
+
         http_response_code(404);
-        echo "404 Rota Bulunamadı...";
-    }
-
-    private function convertToPattern($path, $parameters) {
-        foreach ($parameters as $key => $pattern) {
-            $path = str_replace("{" . $key . "}", "(" . $pattern . ")", $path);
-        }
-        return "#^" . $path . "$#";
-    }
-
-    private function callHandler($handler, $params) {
-        $controllerName = $handler['controller'];
-        $methodName = $handler['method'];
-
-        if (!class_exists($controllerName)) {
-            http_response_code(500);
-            echo "Controller class '" . $controllerName . "' Bulunamadı...";
-            return;
-        }
-
-        $controller = new $controllerName;
-
-        if (!method_exists($controller, $methodName)) {
-            http_response_code(500);
-            echo $controllerName . "' İçinde, '" . $methodName . "' Bulunamadı...";
-            return;
-        }
-
-        call_user_func_array([$controller, $methodName], $params);
+        echo "404 Not Found: The route $uri was not found.";
     }
 }

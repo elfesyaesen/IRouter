@@ -10,30 +10,26 @@
 
 ```php
 require_once __DIR__ . '/system/IRouter/Router.php';
+require_once __DIR__ . '/system/IRouter/Autoloader.php';
 ```
 ## Kullanım
 
 ```php
 $router = new \System\IRouter\Router();
 
-// Ana sayfa için bir rota eklemek
-$router->add('catalog-index', // Kolay tanımlama için rotaya isim verelim
-    array('/', // URL deseni
-    ['controller' => 'Controller\HomeController', 'method' => 'index'], // Çalıştırılacak controller ve metod
-    [], // Varsa parametreler
-    ['GET']) // Kabul edilen HTTP metodları
-);
+// Kullandığınız Class ları otomatik olarak yükler
+\System\IRouter\Autoloader::register();
 
-// ID parametresi içeren bir ürün sayfası rotası eklemek
-$router->add('catalog-product',
-    array('/product/{id}', // Parametre içeren URL deseni
-    ['controller' => 'Controller\ProductController', 'method' => 'show'], // Çalıştırılacak controller ve metod
-    ['id' => '[0-9]+'], // Parametre deseni
-    ['GET', 'POST']) // Kabul edilen HTTP metodları
-);
+//rota sistemi
+use System\IRouter\Router;
 
-// İsteği yönlendir
-$router->dispatch();
+Router::get('anasayfa', ['/', ['Catalog\Controller\HomeController', 'index']])->middleware(["role:admin"]);
+Router::get('urunler', ['/products', ['Catalog\Controller\ProductController', 'index']]);
+Router::get('urun', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
+    ->params(['id' => '[0-9]+'])
+    ->middleware(['permission:product-edit']);
+
+Router::dispatch();
 ```
 
 ## Projeyi Basşatma
