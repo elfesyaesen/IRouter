@@ -15,7 +15,6 @@ require_once __DIR__ . '/system/IRouter/Autoloader.php';
 ## Kullanım
 
 ```php
-$router = new \System\IRouter\Router();
 
 // Kullandığınız Class ları otomatik olarak yükler
 \System\IRouter\Autoloader::register();
