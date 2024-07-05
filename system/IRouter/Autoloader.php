@@ -25,7 +25,7 @@ final class Autoloader
         if (file_exists($file)) {
             require_once $file;
         } else {
-            throw new RuntimeException("Unable to load class: $class");
+            throw new RuntimeException("Sınıf yüklenemiyor: $class");
         }
     }
 

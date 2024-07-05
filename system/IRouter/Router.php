@@ -84,6 +84,6 @@ class Router
         }
     
         http_response_code(404);
-        echo "404 Bulunamadı...";
+        echo $requestUri . ": 404 Bulunamadı...";
     }
 }
