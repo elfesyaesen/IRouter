@@ -41,7 +41,7 @@ Router::prefix('/admin')->middleware(['role:admin'])->group(function() {
 Router::dispatch();
 ```
 
-## Projeyi Basşatma
+## Projeyi Başlatma
 ```php
     php -S 127.0.0.1:8000
 ```
