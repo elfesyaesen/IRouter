@@ -4,9 +4,9 @@ namespace Catalog\Controller;
 
 class HomeController
 {
-    public function index()
+    public function index(): void
     {
-        echo "Welcome to the Home Page!";
+        print 'HomeController index metodu...';
     }
 }
 ?>

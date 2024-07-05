@@ -6,11 +6,11 @@ class UserController
 {
     public function index()
     {
-        echo "Welcome to the User Page!";
+        echo "UserController index metodu...";
     }
 
     public function show($id)
     {
-        echo "User ID: " . htmlspecialchars($id);
+        echo "UserController show metodu: user_id: " . $id;
     }
 }
