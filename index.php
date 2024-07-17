@@ -14,7 +14,7 @@ require_once __DIR__ . '/system/IRouter/Router.php';
 use System\IRouter\Router;
 
 // düz rota kullanımı
-Router::any('catalog', ['/', ['Catalog\Controller\HomeController', 'index']]);
+Router::any('catalog', ['/', ['Admin\Controller\HomeController', 'index']]);
 Router::get('catalog-product', ['/product/{id}', ['Catalog\Controller\ProductController', 'show']])
         ->params(['id' => '[0-9]+']);
 Router::get('catalog-products', ['/products', ['Catalog\Controller\ProductController', 'index']]);
