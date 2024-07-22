@@ -1,6 +1,8 @@
 # PHP Rota Sistemi
 
-**IRouter**, uygulamanızın rotalarını kolaylıkla yönetmek için basit ama güçlü bir yönlendirme sistemidir.
+**IRouter Nedir :**, uygulamanızın rotalarını kolaylıkla yönetebileceğiniz,
+MVC Yapısı kullanan gelişmiş bir altyapı sunan **IRouter** aynı zamanda PSR-4 standardına göre, sınıf ve metodlarınızı otomatik olarak yükler.
+Profesyonel sistemleri çok basit birşekilde oluşturmanıza olanak tanır.
 
 - [Youtube Kanalım](https://www.youtube.com/@software-developers).
 
