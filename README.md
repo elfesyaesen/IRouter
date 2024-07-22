@@ -49,6 +49,14 @@ Router::prefix('/admin')
 
 Router::dispatch();
 ```
+```php
+    //URL den paramatre almak istediğinizde
+    ->params(['id' => '[0-9]+'])
+
+    //Kontrol Sağladıktan sonra Rotanın çalışmasını istediğinizde
+    ->middleware(['permission:user-edit'])
+```
+                        
 
 ## Projeyi Başlatma
 ```php
