@@ -1,5 +1,5 @@
 <?php 
 namespace Catalog\Model;
-class Model {
+class BaseModel {
     
 }

@@ -1,5 +1,5 @@
 <?php 
 namespace Admin\Model;
-class Model {
-    
+class BaseModel {
+
 }
