@@ -4,12 +4,12 @@ namespace Admin\Controller;
 
 class UserController
 {
-    public function index()
+    public function index(): void
     {
         echo "UserController index metodu...";
     }
 
-    public function show($id)
+    public function show($id): void
     {
         echo "UserController show metodu: user_id: " . $id;
     }

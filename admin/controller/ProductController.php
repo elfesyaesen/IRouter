@@ -4,12 +4,12 @@ namespace Admin\Controller;
 
 class ProductController
 {
-    public function index()
+    public function index(): void
     {
         echo "ProductController index metodu...";
     }
 
-    public function show(int $id)
+    public function show(int $id): void
     {
         print 'ProductController show metodu. product id: '.$id;
     }

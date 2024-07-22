@@ -4,12 +4,12 @@ namespace Catalog\Controller;
 
 class DashboardController
 {
-    public function index()
+    public function index(): void
     {
         echo "DashboardController index!";
     }
 
-    public function show()
+    public function show(): void
     {
         echo "DashboardController index!";
     }
