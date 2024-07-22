@@ -2,7 +2,7 @@
 
 namespace Catalog\Controller;
 
-class ProductController
+class ProductController extends BaseController
 {
     public function index(): void
     {

@@ -2,7 +2,7 @@
 
 namespace Catalog\Controller;
 
-class UserController
+class UserController extends BaseController
 {
     public function index(): void
     {

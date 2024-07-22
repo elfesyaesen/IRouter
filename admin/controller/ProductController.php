@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-class ProductController
+class ProductController extends BaseController
 {
     public function index(): void
     {

@@ -2,7 +2,7 @@
 
 namespace Catalog\Controller;
 
-class DashboardController
+class DashboardController extends BaseController
 {
     public function index(): void
     {
