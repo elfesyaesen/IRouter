@@ -4,7 +4,7 @@
 MVC Yapısı kullanan gelişmiş bir altyapı sunan **IRouter** aynı zamanda PSR-4 standardına göre, sınıf ve metodlarınızı otomatik olarak yükler.
 Profesyonel sistemleri çok basit birşekilde oluşturmanıza olanak tanır.
 
-- [Youtube Kanalım](https://www.youtube.com/@software-developers).
+- [Youtube Kanalım](https://www.youtube.com/@elfesyaesen).
 
 ## Kurulum
 
